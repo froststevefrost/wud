@@ -47,8 +47,6 @@ jobs:
         with:
           context: .
           push: true
-          #tags: |
-          #  dundiditnow/wud:latest
-          #  dundiditnow/wud:${{ github.sha }}
-          tags: dundiditnow/wud:${{ github.sha }}
-
+          tags: |
+            dundiditnow/wud:latest
+            dundiditnow/wud:${GITHUB_SHA::7}
