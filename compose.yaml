@@ -1,0 +1,33 @@
+name: wud
+
+networks:
+  proxy:
+    external: true
+  socket-net:
+    external: true
+
+services:
+  main:
+    image: docker.io/getwud/wud:8.1.1
+    restart: unless-stopped
+    env_file:
+      - .env
+    networks:
+      - proxy
+      - socket-net
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /containers/wud/store:/store
+      - /containers/wud/certs:/certs:ro
+    healthcheck:
+      test: curl --fail http://localhost:${WUD_SERVER_PORT:-3000}/health || exit 1
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    labels:
+      # WUD
+      - 'wud.tag.include=^\d+\.\d+\.\d+'
+      - 'wud.link.template=https://github.com/getwud/wud/releases/tag/$${major}.$${minor}.$${patch}'
+      - 'wud.display.icon=hl-whats-up-docker'
+      - 'wud.display.name=WUD - Main'

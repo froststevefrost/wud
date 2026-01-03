@@ -101,3 +101,7 @@ typings/
 
 # Ignore OSX crap-files
 *.DS_Store
+
+# Ignore WUD Store
+store
+certs
