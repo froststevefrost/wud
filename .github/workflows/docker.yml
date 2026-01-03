@@ -35,8 +35,11 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Debug: show github.sha variable
       - name: Show github.sha
-        run: echo "Github sha is: ${{ github.sha }}"
+        run: |
+          echo "Github sha is: ${{ github.sha }}"
 
       # 7️⃣ Build and push the Docker image
       - name: Build and push Docker image
