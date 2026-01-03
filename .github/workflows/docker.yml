@@ -24,10 +24,6 @@ jobs:
         run: npm ci
         working-directory: ui
 
-      # 4️⃣ Debug: Print Docker username from secrets
-      - name: Show Docker username (debug)
-        run: echo "Docker username is ${{ secrets.DOCKERHUB_USERNAME }}"
-
       # 5️⃣ Build the UI
       - name: Build UI
         run: npm run build
@@ -46,7 +42,8 @@ jobs:
         with:
           context: .
           push: true
-          tags: |
-            dundiditnow/wud:latest
-            dundiditnow/wud:${{ github.sha }}
+          #tags: |
+          #  dundiditnow/wud:latest
+          #  dundiditnow/wud:${{ github.sha }}
+          tags: dundiditnow/wud:${{ github.sha }}
 
