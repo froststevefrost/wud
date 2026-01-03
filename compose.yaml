@@ -9,6 +9,7 @@ networks:
 services:
   main:
     #image: docker.io/getwud/wud:8.1.1
+    #image: docker.io/dundiditnow/wud:dev-0bb1b39
     image: docker.io/dundiditnow/wud:latest
     restart: unless-stopped
     env_file:
