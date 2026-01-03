@@ -9,39 +9,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout the repo
+      # Checkout the repo
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ Setup Node.js (for building UI)
+      # Setup Node.js (for building UI)
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 24
 
-      # 3️⃣ Install UI dependencies
+      # Install UI dependencies
       - name: Install UI dependencies
         run: npm ci
         working-directory: ui
 
-      # 5️⃣ Build the UI
+      # Build the UI
       - name: Build UI
         run: npm run build
         working-directory: ui
 
-      # 6️⃣ Login to Docker Hub using your secrets
+      # Login to Docker Hub using your secrets
       - name: Docker login
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Debug: show github.sha variable
-      - name: Show github.sha
-        run: |
-          echo "Github sha is: ${{ github.sha }}"
+      - name: Set short SHA
+        id: vars
+        run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
 
-      # 7️⃣ Build and push the Docker image
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
@@ -49,4 +47,5 @@ jobs:
           push: true
           tags: |
             dundiditnow/wud:latest
-            dundiditnow/wud:${GITHUB_SHA::7}
+            dundiditnow/wud:${{ env.SHORT_SHA }}
+
