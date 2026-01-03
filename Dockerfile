@@ -14,7 +14,9 @@ HEALTHCHECK --interval=30s --timeout=5s CMD if [[ -z ${WUD_SERVER_ENABLED} || ${
 
 WORKDIR /home/node/app
 
-RUN mkdir /store
+RUN mkdir /store && \
+    addgroup -S wud && \
+    adduser -S wud -G wud
 
 # Add useful stuff
 RUN apk add --no-cache tzdata openssl curl git jq bash
@@ -34,6 +36,9 @@ FROM base AS release
 # Default entrypoint
 COPY Docker.entrypoint.sh /usr/bin/entrypoint.sh
 RUN chmod +x /usr/bin/entrypoint.sh
+
+USER wud
+
 ENTRYPOINT ["/usr/bin/entrypoint.sh"]
 CMD ["node", "index"]
 
