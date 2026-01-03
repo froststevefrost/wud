@@ -7,14 +7,35 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
+      # 1. Checkout the repo
       - uses: actions/checkout@v4
+
+      # 2. Set up Node.js for UI build
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 24
+
+      # 3. Install UI dependencies
+      - run: npm ci
+        working-directory: ui
+
+      # 4. Build the UI
+      - run: npm run build
+        working-directory: ui
+
+      # 5. Log in to Docker Hub
       - uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # 6. Build and push Docker image with both `latest` and SHA tag
       - uses: docker/build-push-action@v5
         with:
+          context: .
           push: true
-          tags: dundiditnow/wud:latest
-
+          tags: |
+            dundiditnow/wud:latest
+            dundiditnow/wud:${{ github.sha }}
